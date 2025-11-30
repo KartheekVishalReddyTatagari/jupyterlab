@@ -27,7 +27,7 @@ jobs:
 
       - name: 📦 Install Project Dependencies
         # Install packages before scanning
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: 🛡️ SonarCloud Analysis (DevSecOps Step)
         # The mandatory security scan
