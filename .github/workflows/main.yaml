@@ -57,10 +57,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      # - name: 🐍 Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.11'
 
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
@@ -70,8 +70,8 @@ jobs:
       - name: 📦 Install Node Dependencies
         run: npm install --legacy-peer-deps --ignore scripts
 
-      - name: 🏗️ Build JupyterLab
-        run: npm run build || jlpm build
+      # - name: 🏗️ Build JupyterLab
+      #   run: npm run build || jlpm build
 
       - name: 🛡️ SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
