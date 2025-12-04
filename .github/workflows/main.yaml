@@ -36,8 +36,8 @@
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
 
-    
-       
+
+
 name: DevSecOps CI Pipeline for JupyterLab
 
 on:
@@ -68,7 +68,7 @@ jobs:
           node-version: '20'
 
       - name: 📦 Install Node Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps --ignore scripts
 
       - name: 🏗️ Build JupyterLab
         run: npm run build || jlpm build
