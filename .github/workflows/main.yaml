@@ -67,8 +67,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 📦 Install Node Dependencies
-        run: npm install --legacy-peer-deps --ignore scripts
+      # - name: 📦 Install Node Dependencies
+      #   run: npm install --legacy-peer-deps --ignore scripts
 
       # - name: 🏗️ Build JupyterLab
       #   run: npm run build || jlpm build
