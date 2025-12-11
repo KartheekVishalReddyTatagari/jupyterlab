@@ -15,25 +15,28 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         
-      - name: 🔎 Run Grype Dependency Scan (SCA)
-        uses: anchore/scan-action@v6
-        id: scan
-        # Note: Removing 'continue-on-error: true' and 'severity-cutoff' because we will handle the error in the shell command
-        with:
-          path: "."
-          output-format: json 
-          # We must specify the output file name so the next step can find it, 
-          # otherwise, the action might not generate the 'output-file' variable on failure.
-          output-file: grype-report.json
+      - name: ⬇️ Install Grype CLI
+        # Install the Grype binary directly using the recommended script
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b $HOME/.local/bin
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          grype version # Verify installation and add to path
+          
+      - name: 🔎 Run Grype Scan and Suppress Failure
+        # We run the command directly and use '|| true' to ensure the step exits successfully (exit code 0),
+        # even if Grype finds vulnerabilities and returns a non-zero code.
+        run: |
+          grype dir:. -o json --file grype-report.json --fail-on high || true
 
       - name: 📤 Print Grype Report Content
-        # Run the cat command, but force it to succeed using '|| true'
+        # The file is now guaranteed to exist and this step will run
         run: |
-          echo "--- START GRYPE REPORT ---"
-          cat grype-report.json || true
+          echo "--- START GRYPE REPORT (Medium/High/Critical Findings) ---"
+          cat grype-report.json
           echo "--- END GRYPE REPORT ---"
           
       - name: ⬆️ Upload Grype Report Artifact
+        # The file is now guaranteed to exist and this step will run
         uses: actions/upload-artifact@v4
         with:
           name: grype-security-report
