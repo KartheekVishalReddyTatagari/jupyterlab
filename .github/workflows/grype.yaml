@@ -1,0 +1,35 @@
+# .github/workflows/grype.yaml
+name: 📦 DevSecOps - Dependency Scan (Grype SCA)
+
+# This workflow runs anytime code is pushed or a PR is opened
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  grype_scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        # This step is essential to pull down the dependency manifest files (e.g., package.json)
+        uses: actions/checkout@v4
+        
+      - name: 🔎 Run Grype Dependency Scan (SCA)
+        # We use the Anchore action, which leverages Grype internally.
+        # It scans the current directory (path: '.') for all known package managers (npm, pip, etc.)
+        uses: anchore/scan-action@v6
+        id: scan
+        with:
+          path: "."
+          output-format: cyclonedx-json # Use a structured output format
+          fail-on-severity: high # Fail the build if High or Critical vulns are found
+
+      - name: ⬆️ Upload Grype Report Artifact
+        # Uploads the generated dependency report as a downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-security-report
+          path: ${{ steps.scan.outputs.output-file }} # References the output file created by the scan step
