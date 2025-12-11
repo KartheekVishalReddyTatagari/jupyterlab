@@ -238,7 +238,20 @@ commander
   .action(
     async (name: string | RegExp, version: string = '^latest', args: any) => {
       const basePath = path.resolve(args.path || '.');
-      const pkg = args.regex ? new RegExp(name) : name;
+      let pkg;
+      if (args.regex) {
+        // Validate regex pattern: max length, try/catch RegExp constructor
+        if (typeof name !== 'string' || name.length > 128) {
+          throw new Error('Regex pattern is too long or invalid.');
+        }
+        try {
+          pkg = new RegExp(name);
+        } catch (e) {
+          throw new Error('Invalid regular expression pattern: ' + String(e));
+        }
+      } else {
+        pkg = name;
+      }
 
       if (args.lerna) {
         const paths = utils.getLernaPaths(basePath).sort();
