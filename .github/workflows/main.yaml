@@ -4,8 +4,6 @@ name: DevSecOps CI Pipeline for JupyterLab
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build_and_scan:
