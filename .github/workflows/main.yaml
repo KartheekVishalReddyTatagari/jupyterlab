@@ -4,6 +4,8 @@ name: DevSecOps CI Pipeline for JupyterLab
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build_and_scan:
@@ -29,3 +31,4 @@ jobs:
         env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
